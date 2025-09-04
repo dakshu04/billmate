@@ -11,6 +11,7 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import DashboardPageContent from "@/components/DashboardPageContent";
+import Link from "next/link";
 
 export default function SidebarDemo() {
 
@@ -73,7 +74,7 @@ export default function SidebarDemo() {
 }
 export const Logo = () => {
   return (
-    <a
+    <Link
       href="/"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
@@ -85,17 +86,17 @@ export const Logo = () => {
       >
         Bill Mate
       </motion.span>
-    </a>
+    </Link>
   );
 };
 export const LogoIcon = () => {
   return (
-    <a
+    <Link
       href="#"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
       <img src="https://www.svgrepo.com/show/488064/bill.svg" alt="" className="w-6 h-6"/>
-    </a>
+    </Link>
   );
 };
 

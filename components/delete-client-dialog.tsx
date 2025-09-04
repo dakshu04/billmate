@@ -86,7 +86,7 @@ export function DeleteClientDialog({ isOpen, onClose, onConfirm, clientName, inv
                 <Checkbox
                   id="keep-invoices"
                   checked={!deleteInvoices}
-                  onCheckedChange={(checked: any) => setDeleteInvoices(!checked)}
+                  onCheckedChange={(checked: unknown) => setDeleteInvoices(!checked)}
                   disabled={isDeleting}
                 />
                 <label
