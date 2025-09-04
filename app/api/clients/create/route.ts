@@ -4,8 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-
-    const { userId }  = await auth()
+    
+    await syncUser() // Ensure user is synced with your DB
     try {
         const { userId: clerkId } = await auth() // Clerk user id
         if (!clerkId) return new Response("Unauthorized", { status: 401 })
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
                 phone,
                 gst,
                 company,
-                userId: userId!
+                userId: user.id
             }
         })
         return NextResponse.json(client, { status: 201 })
