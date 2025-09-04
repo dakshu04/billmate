@@ -8,6 +8,7 @@ import {
   IconUserBolt,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const links = [
@@ -22,7 +23,7 @@ export default function DashboardPage() {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-100 dark:bg-neutral-800">
       {/* Sidebar */}
-      <Sidebar open={open} setOpen={setOpen} >
+      <Sidebar open={open} setOpen={setOpen} className="h-full">
         <SidebarBody className="flex flex-col justify-between gap-10 h-full">
           <div className="flex flex-col overflow-x-hidden overflow-y-auto">
             {open ? <Logo /> : <LogoIcon />}
@@ -35,10 +36,10 @@ export default function DashboardPage() {
           <div>
             <SidebarLink
               link={{
-                label: "Bill Mate",
+                label: "Manu Arora",
                 href: "#",
                 icon: (
-                  <img src="https://www.svgrepo.com/show/464088/bill-dollar.svg" className="h-7 w-7 shrink-0 rounded-full" width={50} height={50} alt="Avatar" />
+                  <img src="" className="h-7 w-7 shrink-0 rounded-full" width={50} height={50} alt="Avatar" />
                 ),
               }}
             />
@@ -76,6 +77,6 @@ export const Logo = () => (
 
 export const LogoIcon = () => (
   <a href="#" className="flex items-center py-1">
-    <img src="https://www.svgrepo.com/show/464088/bill-dollar.svg" alt="" />
+    <div className="h-5 w-6 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
   </a>
 );
