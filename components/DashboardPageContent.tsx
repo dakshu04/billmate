@@ -11,12 +11,12 @@ export default function DashboardPageContent() {
         {/* Main Dashboard Content */}
         <DashboardHeader />
 
-        <div className="grid gap-6 mt-6">
+        <div className="container mx-auto px-4 py-6 max-w-7xl space-y-6">
           {/* Summary Cards Section */}
           <SummaryCards />
 
           {/* Quick Actions and Recent Activity */}
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="container mx-auto grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-1">
               <QuickActions />
             </div>

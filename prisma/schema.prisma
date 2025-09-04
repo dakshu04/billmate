@@ -36,11 +36,17 @@ model Client {
   createdAt DateTime @default(now())
 }
 
+enum InvoiceStatus {
+  draft
+  sent
+  paid
+}
+
 model Invoice {
-  id        String   @id @default(cuid())
+  id        String          @id @default(cuid())
   userId    String
   clientId  String
-  status    String   @default("draft")
+  status    InvoiceStatus   @default(draft)
   total     Float
   pdfUrl    String?
   user      User     @relation(fields: [userId], references: [id])
