@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import DashboardPageContent from "@/components/DashboardPageContent";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SidebarDemo() {
 
@@ -78,7 +79,7 @@ export const Logo = () => {
       href="/"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
-      <img src="https://www.svgrepo.com/show/488064/bill.svg" alt="" className="w-6 h-6"/>
+      <Image src="https://www.svgrepo.com/show/488064/bill.svg" alt="" className="w-6 h-6"/>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
