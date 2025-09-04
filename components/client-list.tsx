@@ -34,8 +34,9 @@ export default function ClientListPage() {
 
         // ✅ Response has { clients: [...] }
         setClients(data.clients)
-      } catch (err: any) {
-        setError(err.message)
+        // @typescript-eslint/no-explicit-any
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
         setLoading(false)
       }
