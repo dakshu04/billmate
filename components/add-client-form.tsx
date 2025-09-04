@@ -10,19 +10,26 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Save, User, Phone, FileText } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { Toaster } from "./ui/sonner"
+import { toast } from "sonner"
 
 interface ClientFormData {
   name: string
+  email : string
   phone: string
   gst: string
+  company ?: string
 }
 
 export function AddClientForm() {
   const router = useRouter()
+  
   const [formData, setFormData] = useState<ClientFormData>({
     name: "",
+    email: "",
     phone: "",
     gst: "",
+    company: "",
   })
   const [errors, setErrors] = useState<Partial<ClientFormData>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -70,11 +77,21 @@ export function AddClientForm() {
     setIsSubmitting(true)
 
     try {
-      // TODO: Replace with actual API call to save client
-      console.log("[v0] Saving client:", formData)
+      const response = await fetch("/api/clients/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      if(response.ok) {
+        toast("Client added successfully")
+        setFormData({ name: "", email: "", phone: "", gst: "", company: "" })
+      } else {
+        const data = await response.json()
+        toast(data.error || "Something went wrong")
+      }
 
       // Redirect to clients list on success
       router.push("/clients")
@@ -109,6 +126,22 @@ export function AddClientForm() {
           className={errors.name ? "border-destructive" : ""}
         />
         {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+      </div>
+      {/* Client Email */}
+      <div className="space-y-2">
+        <Label htmlFor="name" className="flex items-center gap-2">
+          <User className="h-4 w-4" />
+          Email
+        </Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Enter client email"
+          value={formData.email}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          className={errors.name ? "border-destructive" : ""}
+        />
+        {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
       </div>
 
       {/* Phone Number */}
@@ -146,6 +179,22 @@ export function AddClientForm() {
         <p className="text-xs text-muted-foreground">Format: GST followed by alphanumeric characters</p>
       </div>
 
+      {/* Company Name */}
+      <div className="space-y-2">
+        <Label htmlFor="company" className="flex items-center gap-2">
+          <FileText className="h-4 w-4" />
+          Company Name
+        </Label>
+        <Input
+          id="company"
+          type="text"
+          placeholder="Company Name"
+          value={formData.company}
+          onChange={(e) => handleInputChange("company", e.target.value.toUpperCase())}
+          className={errors.company ? "border-destructive" : ""}
+        />
+      </div>
+
       {/* Form Actions */}
       <div className="flex gap-3 pt-4">
         <Button
@@ -171,7 +220,7 @@ export function AddClientForm() {
       </div>
 
       {/* Preview Card */}
-      {(formData.name || formData.phone || formData.gst) && (
+      {(formData.name || formData.phone || formData.gst || formData.company) && (
         <Card className="bg-muted/50">
           <CardContent className="pt-6">
             <h3 className="font-medium mb-3">Preview</h3>
@@ -187,6 +236,10 @@ export function AddClientForm() {
               <div className="flex justify-between">
                 <span className="text-muted-foreground">GST:</span>
                 <span className="font-mono">{formData.gst || "—"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Company:</span>
+                <span className="font-mono">{formData.company || "—"}</span>
               </div>
             </div>
           </CardContent>

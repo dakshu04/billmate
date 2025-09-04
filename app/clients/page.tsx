@@ -1,4 +1,5 @@
 import { ClientDetails } from "@/components/client-details"
+import ClientListPage from "@/components/client-list"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -23,7 +24,7 @@ export default function ClientPage({ params }: ClientPageProps) {
           </Link>
         </div>
 
-        <ClientDetails clientId={params.id} />
+        <ClientListPage />
       </div>
     </div>
   )

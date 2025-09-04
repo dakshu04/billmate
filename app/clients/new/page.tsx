@@ -1,6 +1,7 @@
+
+
 import { AddClientForm } from "@/components/add-client-form"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, UserPlus } from "lucide-react"
 import Link from "next/link"
 
@@ -29,15 +30,7 @@ export default function NewClientPage() {
         </div>
 
         {/* Form Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Client Information</CardTitle>
-            <CardDescription>Enter the client details to create a new profile</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <AddClientForm />
-          </CardContent>
-        </Card>
+        <AddClientForm />
       </div>
     </div>
   )
