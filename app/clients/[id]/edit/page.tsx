@@ -41,7 +41,7 @@ export default function EditClientPage({ params }: EditClientPageProps) {
             <CardDescription>Update the client details below</CardDescription>
           </CardHeader>
           <CardContent>
-            <EditClientForm clientId={params.id} />
+            <h1>Edit Client {params.id}</h1>
           </CardContent>
         </Card>
       </div>
