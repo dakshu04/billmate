@@ -43,13 +43,21 @@ enum InvoiceStatus {
 }
 
 model Invoice {
-  id        String          @id @default(cuid())
-  userId    String
-  clientId  String
-  status    InvoiceStatus   @default(draft)
-  total     Float
-  pdfUrl    String?
-  user      User     @relation(fields: [userId], references: [id])
-  client    Client   @relation(fields: [clientId], references: [id])
-  createdAt DateTime @default(now())
+  id          String          @id @default(cuid())
+  userId      String
+  clientId    String
+  status      InvoiceStatus   @default(draft)
+  invoiceNo   String          @unique
+  items       Json            // [{ description, quantity, rate, amount }]
+  subtotal    Float
+  taxPercent  Float
+  taxAmount   Float
+  total       Float
+  dueDate     DateTime
+  notes       String?
+  pdfUrl      String?         // store the generated PDF path
+  user        User            @relation(fields: [userId], references: [id])
+  client      Client          @relation(fields: [clientId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 }

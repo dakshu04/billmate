@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     // ✅ Find matching Prisma user via Clerk ID
     const prismaUser = await prisma.user.findUnique({
       where: { clerkId: user.id },
+      
     })
 
     if (!prismaUser) {
@@ -28,6 +29,12 @@ export async function GET(req: NextRequest) {
     // ✅ Fetch clients for that Prisma user
     const clients = await prisma.client.findMany({
       where: { userId: prismaUser.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+      },
       orderBy: { createdAt: "desc" },
     })
 

@@ -22,13 +22,14 @@ export function QuickActions() {
         </Button>
       </Link>
 
+      <Link href="/invoice/new">
         <Button
           className="w-full justify-start bg-accent text-accent-foreground hover:bg-accent/90"
-          onClick={() => (window.location.href = "/invoices/new")}
         >
           <FileText className="h-4 w-4 mr-2" />
           Create Invoice
         </Button>
+      </Link>
 
         <Button
           variant="outline"
