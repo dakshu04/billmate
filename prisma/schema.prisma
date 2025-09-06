@@ -1,16 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 model User {
@@ -26,7 +20,7 @@ model User {
 model Client {
   id        String   @id @default(cuid())
   name      String
-  email     String    @unique
+  email     String
   phone     String
   gst       String?
   company   String?
@@ -34,6 +28,8 @@ model Client {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+
+  @@unique([email, userId]) // ✅ unique per user
 }
 
 enum InvoiceStatus {
@@ -47,17 +43,19 @@ model Invoice {
   userId      String
   clientId    String
   status      InvoiceStatus   @default(draft)
-  invoiceNo   String          @unique
-  items       Json            // [{ description, quantity, rate, amount }]
+  invoiceNo   String
+  items       Json
   subtotal    Float
   taxPercent  Float
   taxAmount   Float
   total       Float
   dueDate     DateTime
   notes       String?
-  pdfUrl      String?         // store the generated PDF path
+  pdfUrl      String?
   user        User            @relation(fields: [userId], references: [id])
   client      Client          @relation(fields: [clientId], references: [id])
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+
+  @@unique([invoiceNo, userId]) // ✅ unique per user
 }

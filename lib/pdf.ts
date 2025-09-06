@@ -1,58 +1,50 @@
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib"
 
-export async function generateInvoicePDF(invoice: {
-  invoiceNo: string;
-  clientName: string;
-  invoiceDate: string;
-  dueDate: string;
-  items: { description: string; quantity: number; rate: number; amount: number }[];
-  subtotal: number;
-  taxPercent: number;
-  taxAmount: number;
-  total: number;
-  notes?: string;
-}) {
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([600, 750]);
-  const { width, height } = page.getSize();
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+interface PDFData {
+  invoiceNo: string
+  clientName: string
+  invoiceDate: string
+  dueDate: string
+  items: any[]
+  subtotal: number
+  taxPercent: number
+  taxAmount: number
+  total: number
+  notes?: string
+}
 
-  let y = height - 50;
+export async function generateInvoicePDF(data: PDFData): Promise<Uint8Array> {
+  const pdfDoc = await PDFDocument.create()
+  const page = pdfDoc.addPage([600, 800])
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
 
-  page.drawText(`Invoice #${invoice.invoiceNo}`, { x: 50, y, font, size: 18, color: rgb(0, 0, 0) });
-  y -= 30;
-  page.drawText(`Client: ${invoice.clientName}`, { x: 50, y, font, size: 12 });
-  y -= 20;
-  page.drawText(`Invoice Date: ${invoice.invoiceDate}`, { x: 50, y, font, size: 12 });
-  y -= 20;
-  page.drawText(`Due Date: ${invoice.dueDate}`, { x: 50, y, font, size: 12 });
-
-  y -= 30;
-  page.drawText("Items:", { x: 50, y, font, size: 14 });
-  y -= 20;
-
-  invoice.items.forEach((item) => {
-    page.drawText(
-      `${item.description} - Qty: ${item.quantity}, Rate: $${item.rate.toFixed(
-        2
-      )}, Amount: $${item.amount.toFixed(2)}`,
-      { x: 60, y, font, size: 12 }
-    );
-    y -= 15;
-  });
-
-  y -= 10;
-  page.drawText(`Subtotal: $${invoice.subtotal.toFixed(2)}`, { x: 50, y, font, size: 12 });
-  y -= 15;
-  page.drawText(`Tax (${invoice.taxPercent}%): $${invoice.taxAmount.toFixed(2)}`, { x: 50, y, font, size: 12 });
-  y -= 15;
-  page.drawText(`Total: $${invoice.total.toFixed(2)}`, { x: 50, y, font, size: 12 });
-
-  if (invoice.notes) {
-    y -= 30;
-    page.drawText(`Notes: ${invoice.notes}`, { x: 50, y, font, size: 12 });
+  let y = 750
+  const drawText = (text: string, x: number, fontSize = 12) => {
+    page.drawText(text, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
+    y -= fontSize + 5
   }
 
-  const pdfBytes = await pdfDoc.save();
-  return pdfBytes; // Uint8Array
+  drawText(`Invoice #: ${data.invoiceNo}`, 50, 14)
+  drawText(`Client: ${data.clientName}`, 50, 14)
+  drawText(`Date: ${data.invoiceDate}`, 50)
+  drawText(`Due: ${data.dueDate}`, 50)
+  y -= 20
+
+  drawText("Items:", 50, 14)
+  data.items.forEach((item) => {
+    drawText(`${item.description} - ${item.quantity} x ${item.rate} = ${item.amount}`, 60)
+  })
+
+  y -= 20
+  drawText(`Subtotal: ${data.subtotal}`, 50)
+  drawText(`Tax (${data.taxPercent}%): ${data.taxAmount}`, 50)
+  drawText(`Total: ${data.total}`, 50, 14)
+
+  if (data.notes) {
+    y -= 20
+    drawText(`Notes: ${data.notes}`, 50)
+  }
+
+  const pdfBytes = await pdfDoc.save()
+  return pdfBytes
 }

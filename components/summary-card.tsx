@@ -37,7 +37,16 @@ export function SummaryCards() {
     fetchSummary()
   }, [])
 
-    if (loading) return <p className="text-gray-500">Loading summary...</p>
+    if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading summary...</p>
+        </div>
+      </div>
+    )
+  }
     if (error) return <p className="text-red-500">{error}</p>
     if (!data) return null
 

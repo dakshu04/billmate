@@ -48,11 +48,7 @@ export function AddClientForm() {
       newErrors.phone = "Please enter a valid phone number"
     }
 
-    if (!formData.gst.trim()) {
-      newErrors.gst = "GST number is required"
-    } else if (!/^GST[A-Z0-9]{9,15}$/i.test(formData.gst)) {
-      newErrors.gst = "Please enter a valid GST number (e.g., GST123456789)"
-    }
+    
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

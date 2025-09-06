@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
         const body = await req.json()
         const { name, email, phone, gst, company } = body
 
-        if (!name || !phone || !gst) {
+        if (!name || !phone) {
             return NextResponse.json({
-                message: "Name, Phone, and GST are required"
+                message: "Name and Phone are required"
             }, {
                 status: 400
             })
