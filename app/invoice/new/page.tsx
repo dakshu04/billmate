@@ -21,12 +21,12 @@ interface InvoiceItem {
   rate: number
   amount: number
 }
-
+const generateInvoiceNumber = () => `INV-${Date.now()}`
 export default function CreateInvoice() {
   const [selectedClient, setSelectedClient] = useState("")
-  const [invoiceNumber, setInvoiceNumber] = useState("INV-004")
+  const [invoiceNumber, setInvoiceNumber] = useState(generateInvoiceNumber())
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split("T")[0])
-  const [dueDate, setDueDate] = useState("")
+  const [dueDate, setDueDate] = useState(new Date().toISOString().split("T")[0])
   const [taxRate, setTaxRate] = useState(10)
   const [notes, setNotes] = useState("")
   const [items, setItems] = useState<InvoiceItem[]>([{ id: "1", description: "", quantity: 1, rate: 0, amount: 0 }])
@@ -64,7 +64,7 @@ export default function CreateInvoice() {
   const addItem = () => {
     const newItem: InvoiceItem = {
       id: Date.now().toString(),
-      description: "set your description",
+      description: "",
       quantity: 1,
       rate: 0,
       amount: 0,
@@ -105,16 +105,16 @@ export default function CreateInvoice() {
 
 
     const invoiceData = {
-      clientId: selectedClient,
-      invoiceNumber,
-      invoiceDate,
-      dueDate,
-      items,
-      subtotal,
-      taxRate,
-      taxAmount,
-      total,
-      notes,
+       clientId: selectedClient,
+        invoiceNumber,
+        invoiceDate, 
+        dueDate,
+        items,
+        subtotal,
+        taxPercent: taxRate, // rename here
+        taxAmount,
+        total,
+        notes,
     }
 
       try {

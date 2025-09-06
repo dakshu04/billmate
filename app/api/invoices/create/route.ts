@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     if (!prismaUser) return NextResponse.json({ message: "User not found" }, { status: 404 })
 
     const body = await req.json()
-    const { clientId, invoiceNumber, invoiceDate, dueDate, items, taxRate, notes, subtotal, total, taxAmount } = body
+    const { clientId, invoiceNumber, invoiceDate, dueDate, items, taxPercent, notes, subtotal, total, taxAmount } = body
 
     if (!clientId || !invoiceNumber || !dueDate || !items?.length) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 })
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       dueDate,
       items,
       subtotal,
-      taxPercent: taxRate,
+      taxPercent,
       taxAmount,
       total,
       notes,
@@ -48,14 +48,14 @@ export async function POST(req: Request) {
         invoiceNo: invoiceNumber,
         items,
         subtotal,
-        taxPercent: taxRate,
+        taxPercent,
         taxAmount,
         total,
         notes,
         dueDate: new Date(body.dueDate),
         status: "draft",
         pdfUrl,
-      }
+      },
     })
 
     return NextResponse.json({ message: "Invoice created successfully", invoice }, { status: 201 })
