@@ -53,6 +53,7 @@ export async function POST(req: Request) {
         total,
         notes,
         dueDate: new Date(body.dueDate),
+        invoiceDate: new Date(body.invoiceDate),
         status: "draft",
         pdfUrl,
       },

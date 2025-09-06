@@ -75,12 +75,16 @@ export default function LandingPage() {
                 Pricing
               </Link>
               {/* <ThemeToggle /> */}
+              <Link href="/sign-in">
               <Button variant="outline" size="sm">
                 Sign In
               </Button>
+              </Link>
+              <Link href="/sign-up">
               <Button size="sm" className="bg-primary hover:bg-primary/90">
                 Get Started
               </Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -111,7 +115,7 @@ export default function LandingPage() {
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="sign-up">
+                  <Link href="/sign-up">
                     <Button size="sm" className="bg-primary hover:bg-primary/90">
                       Get Started
                     </Button>
@@ -141,10 +145,12 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <Link href="/sign-up">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-6">
                 Create Invoice Now
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
+              </Link>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
                 Watch Demo
               </Button>
