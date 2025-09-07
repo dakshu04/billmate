@@ -71,9 +71,7 @@ export default function LandingPage() {
               <Link href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
                 How it Works
               </Link>
-              <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </Link>
+              
               {/* <ThemeToggle /> */}
               <Link href="/sign-in">
               <Button variant="outline" size="sm">
