@@ -402,17 +402,13 @@ export default function LandingPage() {
               less than 60 seconds.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
+              <Link href="/sign-up">
+                        <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
                 Get Started Free
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent"
-              >
-                Schedule Demo
-              </Button>
+              </Link>
+              
             </div>
           </div>
         </div>
