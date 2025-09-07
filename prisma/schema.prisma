@@ -53,7 +53,7 @@ model Invoice {
   taxPercent  Float
   taxAmount   Float
   total       Float
-  invoiceDate DateTime?        @default(now())
+  invoiceDate DateTime?        
   dueDate     DateTime
   notes       String?
   pdfUrl      String?         // store the generated PDF path

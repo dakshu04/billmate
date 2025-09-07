@@ -2,8 +2,8 @@
 import { prisma } from "@/lib/db"
 import { currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
-import { generateInvoicePDF } from "@/lib/pdf"
 import { uploadPDFToUploadThing } from "@/lib/upload"
+import { generateInvoicePDF } from "@/lib/pdf"
 
 export async function POST(req: Request) {
   try {
@@ -24,22 +24,22 @@ export async function POST(req: Request) {
     if (!client) return NextResponse.json({ message: "Client not found" }, { status: 404 })
 
     // Generate invoice PDF
-    const pdfBytes = await generateInvoicePDF({
-      invoiceNo: invoiceNumber,
-      clientName: client.name,
-      invoiceDate,
-      dueDate,
-      items,
-      subtotal,
-      taxPercent,
-      taxAmount,
-      total,
-      notes,
-    })
+    // const pdfBytes = await generateInvoicePDF({
+    //   invoiceNo: invoiceNumber,
+    //   clientName: client.name,
+    //   invoiceDate,
+    //   dueDate,
+    //   items,
+    //   subtotal,
+    //   taxPercent,
+    //   taxAmount,
+    //   total,
+    //   notes,
+    // })
 
     // Upload to storage
-    const uploadResult = await uploadPDFToUploadThing(pdfBytes, `${invoiceNumber}.pdf`)
-    const pdfUrl = uploadResult?.url || null
+    // const uploadResult = await uploadPDFToUploadThing(pdfBytes, `${invoiceNumber}.pdf`)
+    const pdfUrl =  null
 
     const invoice = await prisma.invoice.create({
       data: {

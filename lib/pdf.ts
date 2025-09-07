@@ -1,50 +1,69 @@
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib"
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 
-interface PDFData {
-  invoiceNo: string
+interface InvoiceItem {
+  id: string
+  description: string
+  quantity: number
+  rate: number
+  amount: number
+}
+
+export function generateInvoicePDF(invoiceData: {
   clientName: string
+  clientEmail: string
+  invoiceNumber: string
   invoiceDate: string
   dueDate: string
-  items: any[]
+  items: InvoiceItem[]
   subtotal: number
   taxPercent: number
   taxAmount: number
   total: number
   notes?: string
-}
+}) {
+  const doc = new jsPDF()
 
-export async function generateInvoicePDF(data: PDFData): Promise<Uint8Array> {
-  const pdfDoc = await PDFDocument.create()
-  const page = pdfDoc.addPage([600, 800])
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+  // Title
+  doc.setFontSize(18)
+  doc.text("Invoice", 14, 20)
 
-  let y = 750
-  const drawText = (text: string, x: number, fontSize = 12) => {
-    page.drawText(text, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
-    y -= fontSize + 5
-  }
+  // Invoice info
+  doc.setFontSize(12)
+  doc.text(`Invoice #: ${invoiceData.invoiceNumber}`, 14, 30)
+  doc.text(`Client: ${invoiceData.clientName}`, 14, 37)
+  doc.text(`Email: ${invoiceData.clientEmail}`, 14, 44)
+  doc.text(`Invoice Date: ${invoiceData.invoiceDate}`, 14, 51)
+  doc.text(`Due Date: ${invoiceData.dueDate}`, 14, 58)
 
-  drawText(`Invoice #: ${data.invoiceNo}`, 50, 14)
-  drawText(`Client: ${data.clientName}`, 50, 14)
-  drawText(`Date: ${data.invoiceDate}`, 50)
-  drawText(`Due: ${data.dueDate}`, 50)
-  y -= 20
+  // Items table
+  const tableData = invoiceData.items.map((item) => [
+    item.description || "-",
+    item.quantity.toString(),
+    item.rate.toFixed(2),
+    item.amount.toFixed(2),
+  ])
 
-  drawText("Items:", 50, 14)
-  data.items.forEach((item) => {
-    drawText(`${item.description} - ${item.quantity} x ${item.rate} = ${item.amount}`, 60)
+  autoTable(doc, {
+    startY: 70,
+    head: [["Description", "Quantity", "Rate", "Amount"]],
+    body: tableData,
   })
 
-  y -= 20
-  drawText(`Subtotal: ${data.subtotal}`, 50)
-  drawText(`Tax (${data.taxPercent}%): ${data.taxAmount}`, 50)
-  drawText(`Total: ${data.total}`, 50, 14)
+  let finalY = (doc as any).lastAutoTable.finalY || 70
 
-  if (data.notes) {
-    y -= 20
-    drawText(`Notes: ${data.notes}`, 50)
+  // Totals
+  doc.text(`Subtotal: $${invoiceData.subtotal.toFixed(2)}`, 140, finalY + 10)
+  doc.text(`Tax (${invoiceData.taxPercent}%): $${invoiceData.taxAmount.toFixed(2)}`, 140, finalY + 17)
+  doc.text(`Total: $${invoiceData.total.toFixed(2)}`, 140, finalY + 24)
+
+  // Notes
+  if (invoiceData.notes) {
+    doc.setFontSize(11)
+    doc.text("Notes:", 14, finalY + 40)
+    doc.text(invoiceData.notes, 14, finalY + 47)
   }
 
-  const pdfBytes = await pdfDoc.save()
-  return pdfBytes
+  // Download file
+  doc.save(`Invoice-${invoiceData.invoiceNumber}.pdf`)
 }

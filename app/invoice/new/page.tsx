@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator"
 import { Plus, Trash2, ArrowLeft, Send } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { generateInvoicePDF } from "@/lib/pdf"
 
 
 interface InvoiceItem {
@@ -24,7 +25,7 @@ interface InvoiceItem {
 const generateInvoiceNumber = () => `INV-${Date.now()}`
 export default function CreateInvoice() {
   const [selectedClient, setSelectedClient] = useState("")
-  const [invoiceNumber, setInvoiceNumber] = useState(generateInvoiceNumber())
+  const [invoiceNumber, setInvoiceNumber] = useState("")
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split("T")[0])
   const [dueDate, setDueDate] = useState("")
   const [taxRate, setTaxRate] = useState(10)
@@ -53,6 +54,7 @@ export default function CreateInvoice() {
 
         // Save clients into state
         setClients(data.clients)
+        setInvoiceNumber(`INV-${Date.now()}`)
         console.log("✅ Clients loaded:", data)
       } catch (err) {
         console.error("❌ Error loading clients:", err)
@@ -101,52 +103,58 @@ export default function CreateInvoice() {
 
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  e.preventDefault()
 
+  const selectedClientData = clients.find((c) => c.id === selectedClient)
+  if (!selectedClientData) {
+    alert("Please select a client")
+    return
+  }
 
-    const invoiceData = {
-       clientId: selectedClient,
-        invoiceNumber,
-        invoiceDate, 
-        dueDate,
-        items,
-        subtotal,
-        taxPercent: taxRate, // rename here
-        taxAmount,
-        total,
-        notes,
+  const invoiceData = {
+    clientName: selectedClientData.name,
+    clientEmail: selectedClientData.email,
+    invoiceNumber,
+    invoiceDate,
+    dueDate,
+    items,
+    subtotal,
+    taxPercent: taxRate,
+    taxAmount,
+    total,
+    notes,
+  }
+
+  try {
+    const res = await fetch("/api/invoices/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...invoiceData,
+        clientId: selectedClient, // still save clientId in DB
+      }),
+    })
+
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error("❌ API error response:", errorText)
+      throw new Error("Failed to create invoice")
     }
 
-      try {
-        const res = await fetch("/api/invoices/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(invoiceData),
-        })
+    const data = await res.json()
+    console.log("✅ Invoice saved:", data)
 
-        if (!res.ok) {
-           // Log server response text so you know WHY it failed
-          const errorText = await res.text()
-          console.error("❌ API error response:", errorText)
-          throw new Error("Failed to create invoice")
-        }
+    // Download PDF
+    generateInvoicePDF(invoiceData)
 
-        const data = await res.json()
-        console.log("✅ Invoice saved:", data)
-        router.push("/invoice")
-        
-         
-        
+    router.push("/invoice")
+  } catch (error) {
+    console.error("❌ Error saving invoice:", error)
+  }
+}
 
-
-        // optionally show success toast and redirect
-      } catch (error) {
-        console.error("❌ Error saving invoice:", error)
-      }
-
-    }
 
 
   return (
@@ -363,7 +371,7 @@ export default function CreateInvoice() {
             </Link>
             <Button type="submit" className="bg-primary hover:bg-primary/90">
               <Send className="w-4 h-4 mr-2" />
-              Create Invoice
+              Create Invoice and download PDF
             </Button>
           </div>
             </form>
