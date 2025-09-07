@@ -14,9 +14,9 @@ export function QuickActions() {
           Quick Actions
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        <Link href="/clients/new" passHref>
-        <Button className="w-full justify-start bg-primary text-primary-foreground hover:bg-primary/90">
+      <CardContent className="space-y-3 ">
+        <Link href="/clients/new">
+        <Button className="w-full justify-start bg-primary text-primary-foreground hover:bg-primary/90 mb-1">
           <UserPlus className="h-4 w-4 mr-2" />
           Add New Client
         </Button>
@@ -24,7 +24,7 @@ export function QuickActions() {
 
       <Link href="/invoice/new">
         <Button
-          className="w-full justify-start bg-accent text-accent-foreground hover:bg-accent/90"
+          className="w-full justify-start bg-accent text-accent-foreground hover:bg-accent/90 mb-1"
         >
           <FileText className="h-4 w-4 mr-2" />
           Create Invoice
@@ -33,7 +33,7 @@ export function QuickActions() {
 
         <Button
           variant="outline"
-          className="w-full justify-start border-border text-foreground hover:bg-muted bg-transparent"
+          className="w-full justify-start border-border text-foreground "
         >
           <Send className="h-4 w-4 mr-2" />
           Send Reminders
