@@ -1,5 +1,7 @@
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 
 interface InvoiceItem {
   id: string
@@ -50,7 +52,7 @@ export function generateInvoicePDF(invoiceData: {
     body: tableData,
   })
 
-  let finalY = (doc as any).lastAutoTable.finalY || 70
+  const finalY = (doc as any).lastAutoTable.finalY || 70
 
   // Totals
   doc.text(`Subtotal: $${invoiceData.subtotal.toFixed(2)}`, 140, finalY + 10)

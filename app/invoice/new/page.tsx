@@ -149,7 +149,7 @@ export default function CreateInvoice() {
     // Download PDF
     generateInvoicePDF(invoiceData)
 
-    router.push("/invoice")
+    router.push("/dashboard")
   } catch (error) {
     console.error("❌ Error saving invoice:", error)
   }
